@@ -142,7 +142,7 @@
       :*:
         - -fsanitize=address,undefined
         - -std=gnu23
-        - -Og
+        - -Os
     :link:
       :*:
         - -fsanitize=address,undefined

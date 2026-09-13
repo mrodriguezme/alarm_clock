@@ -20,21 +20,27 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-FROM alpine:3.24.1@sha256:28bd5fe8b56d1bd048e5babf5b10710ebe0bae67db86916198a6eec434943f8b
+FROM debian:stable-slim@sha256:04634311a8d5fc442b6eb06d792293c4f3e2268652ca7634e00ce8ef5cc0a28a
 
-RUN apk update --no-cache &&                              \
-    apk add --no-cache                                    \
-    build-base=0.5-r4                                     \
-    clang22-extra-tools=22.1.3-r2                         \
-    cmake=4.2.3-r0                                        \
-    doxygen=1.17.0-r0                                     \
-    gdb-multiarch=16.3-r4                                 \
-    graphviz=12.2.1-r3                                    \
-    ninja-build=1.13.2-r1                                 \
-    picolibc-arm-none-eabi=1.8.11-r0                      \
-    ruby=3.4.9-r0                                      && \
-    gem install ceedling -v 1.1.7 --no-document        && \
-    ln -s /usr/lib/ninja-build/bin/ninja /usr/bin/ninja
+RUN apt-get update                          && \
+    ARCH="$(dpkg --print-architecture)"     && \
+    if [ "$ARCH" = "arm64" ]; then             \
+        NINJA_VER="1.12.1-1+b1";               \
+    else                                       \
+        NINJA_VER="1.12.1-1";                  \
+    fi                                      && \
+    apt-get install -y --no-install-recommends \
+    build-essential=12.12                      \
+    clangd=1:19.0-63                           \
+    cmake=3.31.6-2                             \
+    doxygen=1.9.8+ds-2.1                       \
+    gcc-arm-none-eabi=15:14.2.rel1-1           \
+    gdb-multiarch=16.3-1                       \
+    graphviz=2.42.4-3                          \
+    ninja-build="$NINJA_VER"                   \
+    picolibc-arm-none-eabi=1.8.10-2            \
+    ruby=1:3.3+b1                           && \
+    rm -rf /var/lib/apt/lists/*             && \
+    gem install ceedling -v 1.1.7 --no-document
 
-ENV PATH="/usr/lib/ninja-build/bin:${PATH}"
-CMD ["sh"]
+CMD ["bash"]
