@@ -7,5 +7,6 @@
   },
   "editor.rulers": [
     80
-  ]
+  ],
+  "cmake.copyCompileCommands": "${workspaceFolder}/compile_commands.json"
 }
