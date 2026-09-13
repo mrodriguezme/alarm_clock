@@ -1,9 +1,6 @@
 {
   "name": "alarm_clock",
-  "build": {
-    "context": "..",
-    "dockerfile": "../Dockerfile"
-  },
+  "image": "mrodriguez0/alarm_clock:v1.0.0",
   "workspaceFolder": "/workspace",
   "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind",
   "customizations": {
