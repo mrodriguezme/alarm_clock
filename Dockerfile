@@ -37,6 +37,7 @@ RUN apt-get update                          && \
     gcc-arm-none-eabi=15:14.2.rel1-1           \
     gdb-multiarch=16.3-1                       \
     graphviz=2.42.4-3                          \
+    libicu76=76.1-4                            \
     ninja-build="$NINJA_VER"                   \
     picolibc-arm-none-eabi=1.8.10-2            \
     ruby=1:3.3+b1                           && \
