@@ -1,0 +1,67 @@
+{
+  "version": 3,
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 22,
+    "patch": 1
+  },
+  "configurePresets": [
+    {
+      "name": "base",
+      "hidden": true,
+      "description": "Default build using Ninja generator",
+      "generator": "Ninja",
+      "cacheVariables": {
+        "CMAKE_EXPORT_COMPILE_COMMANDS": {
+          "type": "BOOL",
+          "value": "ON"
+        }
+      },
+      "binaryDir": "${sourceDir}/build_${presetName}"
+    },
+    {
+      "name": "dbg",
+      "hidden": true,
+      "inherits": "base",
+      "description": "Base configuration for Debug builds",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": {
+          "type": "STRING",
+          "value": "Debug"
+        }
+      }
+    },
+    {
+      "name": "rel",
+      "hidden": true,
+      "inherits": "base",
+      "description": "Base configuration for Release builds",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": {
+          "type": "STRING",
+          "value": "Release"
+        }
+      }
+    },
+    {
+      "name": "gcc",
+      "hidden": true,
+      "description": "Base configuration for gcc",
+      "toolchainFile": "${sourceDir}/cmake/gcc.cmake"
+    },
+    {
+      "name": "dbg_gcc",
+      "hidden": false,
+      "description": "Debug build with gcc",
+      "displayName": "Debug build with gcc",
+      "inherits": ["dbg", "gcc"]
+    },
+    {
+      "name": "rel_gcc",
+      "hidden": false,
+      "description": "Release build with gcc",
+      "displayName": "Release build with gcc",
+      "inherits": ["rel", "gcc"]
+    }
+  ]
+}

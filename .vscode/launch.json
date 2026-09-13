@@ -1,0 +1,17 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Debug on Board",
+      "cwd": "${workspaceFolder}",
+      "executable": "${command:cmake.launchTargetPath}",
+      "request": "launch",
+      "type": "cortex-debug",
+      "servertype": "external",
+      "gdbTarget": "host.docker.internal:3333",
+      "interface": "swd",
+      "device": "MSPM0C1105",
+      "runToEntryPoint": "main"
+    }
+  ]
+}

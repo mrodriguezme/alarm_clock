@@ -1,0 +1,11 @@
+{
+  "cortex-debug.armToolchainPath": "/usr/bin",
+  "cortex-debug.gdbPath": "/usr/bin/gdb-multiarch",
+  "cmake.debugConfig": {
+    "MIMode": "gdb",
+    "miDebuggerPath": "/usr/bin/gdb-multiarch"
+  },
+  "editor.rulers": [
+    80
+  ]
+}

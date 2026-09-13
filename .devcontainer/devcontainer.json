@@ -1,0 +1,22 @@
+{
+  "name": "alarm_clock",
+  "build": {
+    "context": "..",
+    "dockerfile": "../Dockerfile"
+  },
+  "workspaceFolder": "/workspace",
+  "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "marus25.cortex-debug",
+        "EditorConfig.EditorConfig",
+        "ms-vscode.cmake-tools",
+        "llvm-vs-code-extensions.vscode-clangd",
+        "ms-vscode.cpptools",
+        "throw-the-switch.vscode-ceedling"
+      ]
+    }
+  },
+  "runArgs": ["--add-host=host.docker.internal:host-gateway"]
+}
