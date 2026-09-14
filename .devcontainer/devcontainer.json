@@ -1,6 +1,6 @@
 {
   "name": "alarm_clock",
-  "image": "mrodriguez0/alarm_clock:v1.0.0",
+  "image": "mrodriguez0/alarm_clock:v1.1.0",
   "workspaceFolder": "/workspace",
   "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind",
   "customizations": {
