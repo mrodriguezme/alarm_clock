@@ -23,39 +23,47 @@
 FROM debian:stable-slim@sha256:04634311a8d5fc442b6eb06d792293c4f3e2268652ca7634e00ce8ef5cc0a28a
 
 ARG SNAPSHOT=20260913T202244Z
-
-RUN echo "deb [check-valid-until=no] http://snapshot.debian.org/archive/debian/${SNAPSHOT} trixie main" \
-        > /etc/apt/sources.list.d/snapshot.list                                  && \
-    rm -f /etc/apt/sources.list.d/debian.sources /etc/apt/sources.list           && \
-    apt-get update                                                               && \
-    ARCH="$(dpkg --print-architecture)"                                          && \
-    if [ "$ARCH" = "arm64" ]; then                                                  \
-        NINJA_VER="1.12.1-1+b1";                                                    \
-    else                                                                            \
-        NINJA_VER="1.12.1-1";                                                       \
-    fi                                                                           && \
-    apt-get install -y --no-install-recommends                                      \
-    build-essential=12.12                                                           \
-    clangd=1:19.0-63                                                                \
-    cmake=3.31.6-2                                                                  \
-    doxygen=1.9.8+ds-2.1                                                            \
-    gcc-arm-none-eabi=15:14.2.rel1-1                                                \
-    gdb-multiarch=16.3-1                                                            \
-    graphviz=2.42.4-3                                                               \
-    libicu76=76.1-4                                                                 \
-    ninja-build="$NINJA_VER"                                                        \
-    picolibc-arm-none-eabi=1.8.10-2                                                 \
-    ruby3.3-dev=3.3.8-2                                                             \
-    ruby=1:3.3+b1                                                                && \
-    rm -rf /var/lib/apt/lists/*
+ARG USERNAME=builder
+ARG USER_UID=1000
+ARG USER_GID=$USER_UID
 
 COPY Gemfile Gemfile.lock /tmp/lock/
 
-RUN gem install bundler -v 4.0.20              && \
-    cd /tmp/lock                               && \
-    bundle config set --local frozen true      && \
-    bundle config set --local path.system true && \
-    bundle install                             && \
+RUN groupadd --gid $USER_GID $USERNAME                                                               && \
+    useradd --uid $USER_UID --gid $USER_GID -m $USERNAME                                             && \
+    echo "deb [check-valid-until=no] http://snapshot.debian.org/archive/debian/${SNAPSHOT} trixie main" \
+        > /etc/apt/sources.list.d/snapshot.list                                                      && \
+    rm -f /etc/apt/sources.list.d/debian.sources /etc/apt/sources.list                               && \
+    apt-get update                                                                                   && \
+    ARCH="$(dpkg --print-architecture)"                                                              && \
+    if [ "$ARCH" = "arm64" ]; then                                                                      \
+        NINJA_VER="1.12.1-1+b1";                                                                        \
+    else                                                                                                \
+        NINJA_VER="1.12.1-1";                                                                           \
+    fi                                                                                               && \
+    apt-get install -y --no-install-recommends                                                          \
+    build-essential=12.12                                                                               \
+    clangd=1:19.0-63                                                                                    \
+    cmake=3.31.6-2                                                                                      \
+    doxygen=1.9.8+ds-2.1                                                                                \
+    gcc-arm-none-eabi=15:14.2.rel1-1                                                                    \
+    gdb-multiarch=16.3-1                                                                                \
+    graphviz=2.42.4-3                                                                                   \
+    libicu76=76.1-4                                                                                     \
+    ninja-build="$NINJA_VER"                                                                            \
+    picolibc-arm-none-eabi=1.8.10-2                                                                     \
+    sudo=1.9.16p2-3+deb13u2                                                                             \
+    ruby3.3-dev=3.3.8-2                                                                                 \
+    ruby=1:3.3+b1                                                                                    && \
+    rm -rf /var/lib/apt/lists/*                                                                      && \
+    echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME                              && \
+    chmod 0440 /etc/sudoers.d/$USERNAME                                                              && \
+    gem install bundler -v 4.0.20                                                                    && \
+    cd /tmp/lock                                                                                     && \
+    bundle config set --local frozen true                                                            && \
+    bundle config set --local path.system true                                                       && \
+    bundle install                                                                                   && \
     rm -rf /tmp/lock
 
+USER $USERNAME
 CMD ["bash"]
